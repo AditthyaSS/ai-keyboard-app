@@ -1,5 +1,8 @@
 name: Update Progress Bar
 
+permissions:
+  contents: write   # 👈 THIS LINE FIXES EVERYTHING
+
 on:
   push:
     branches:
