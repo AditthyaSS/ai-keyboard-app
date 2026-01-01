@@ -1,6 +1,11 @@
 # ai_keyboard_app
 
-A new Flutter project.
+## 🎮 Progress
+
+- 🧠 **Level**: 1
+- ✨ **XP**: 0 / 100
+
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%
 
 ## Getting Started
 

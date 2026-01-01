@@ -1,0 +1,56 @@
+name: Update Progress Bar
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  progress:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Update README progress
+        run: |
+          python << 'EOF'
+          import re
+
+          with open("README.md", "r") as f:
+              content = f.read()
+
+          match = re.search(r'XP\\*\\*: (\\d+) / 100', content)
+          if not match:
+              exit(0)
+
+          xp = int(match.group(1))
+          xp = min(xp + 10, 100)
+
+          blocks = xp // 10
+          bar = "🟩" * blocks + "⬜" * (10 - blocks)
+
+          content = re.sub(
+              r'XP\\*\\*: \\d+ / 100',
+              f'XP**: {xp} / 100',
+              content
+          )
+
+          content = re.sub(
+              r'[🟩⬜]{10} \\d+%',
+              f'{bar} {xp}%',
+              content
+          )
+
+          with open("README.md", "w") as f:
+              f.write(content)
+          EOF
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add README.md
+          git commit -m "🎮 Auto-update progress"
+          git push
