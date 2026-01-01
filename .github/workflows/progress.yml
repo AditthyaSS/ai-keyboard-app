@@ -1,7 +1,7 @@
 name: Update Progress Bar
 
 permissions:
-  contents: write   # 👈 THIS LINE FIXES EVERYTHING
+  contents: write
 
 on:
   push:
@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-            - name: Update README progress
+      - name: Update README progress
         run: |
-          python << 'EOF'
+          python - << 'EOF'
           import re
 
           try:
@@ -59,3 +59,11 @@ jobs:
               print("Error:", e)
               exit(0)
           EOF
+
+      - name: Commit README changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add README.md
+          git commit -m "🎮 Auto-update progress" || echo "No changes to commit"
+          git push
