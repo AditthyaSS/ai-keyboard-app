@@ -27,7 +27,12 @@
 <br/><br/>
 
 <!-- Pixel Character -->
-<img src="assets/pixel_builder.png" width="120" alt="Pixel Builder"/>
+<img src="assets/pixel/construction_icon.avif" width="120" alt="Pixel Builder"/>
+
+<br/>
+
+### 🚧 This repo is under construction! 🚧
+*Building something awesome with AI magic* ✨
 
 <br/>
 
@@ -329,7 +334,12 @@ This project is licensed under the MIT License
 <img src="https://capsule-render.vercel.app/api?type=waving&color=02569B&height=100&section=footer"/>
 
 **Made with 💙 and Flutter**
+<br/>
 
+<!-- Pixel Flutter -->
+<img src="assets/pixel/flutter_icon.png" width="80" alt="Flutter"/>
+
+<br/>
 <img src="https://user-images.githubusercontent.com/74038190/212284115-f47cd8ff-2ffb-4b04-b5bf-4d1c14c0247f.gif" width="100%">
 
 </div>
