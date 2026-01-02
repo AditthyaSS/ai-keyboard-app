@@ -1,65 +1,41 @@
-name: Update Progress Bar
-
-permissions:
-  contents: write
+name: Update Progress Badge
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  progress:
+  update-progress:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Update README progress
+        with:
+          fetch-depth: 0
+      
+      - name: Calculate Progress
+        id: progress
         run: |
-          python << 'EOF'
-          import re
-
-          with open("README.md", "r", encoding="utf-8") as f:
-              content = f.read()
-
-          # Find XP value (very tolerant)
-          xp_match = re.search(r'XP.*?:\s*(\d+)\s*/\s*100', content)
-          if not xp_match:
-              print("XP not found, exiting safely")
-              exit(0)
-
-          xp = int(xp_match.group(1))
-          xp = min(xp + 10, 100)
-
-          blocks = xp // 10
-          bar = "🟩" * blocks + "⬜" * (10 - blocks)
-
-          # Replace XP line
-          content = re.sub(
-              r'XP.*?:\s*\d+\s*/\s*100',
-              f'✨ **XP**: {xp} / 100',
-              content
-          )
-
-          # Replace progress bar line
-          content = re.sub(
-              r'[🟩⬜]{10}\s*\d+%',
-              f'{bar} {xp}%',
-              content
-          )
-
-          with open("README.md", "w", encoding="utf-8") as f:
-              f.write(content)
-
-          print("README updated")
-          EOF
-
-      - name: Commit README changes
+          # Count commits (10% per 5 commits, max 100%)
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          PROGRESS=$((COMMIT_COUNT * 2))
+          if [ $PROGRESS -gt 100 ]; then
+            PROGRESS=100
+          fi
+          echo "progress=$PROGRESS" >> $GITHUB_OUTPUT
+          echo "Current progress: $PROGRESS%"
+      
+      - name: Update Progress JSON
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add README.md
-          git commit -m "🎮 Update progress bar" || echo "No changes to commit"
+          echo '{"schemaVersion":1,"label":"Project Progress","message":"${{ steps.progress.outputs.progress }}%","color":"${{ steps.progress.outputs.progress >= 100 && 'brightgreen' || steps.progress.outputs.progress >= 50 && 'yellow' || 'orange' }}"}' > .github/badges/progress.json
+      
+      - name: Commit Progress Update
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          mkdir -p .github/badges
+          echo '{"schemaVersion":1,"label":"🎮 Progress","message":"${{ steps.progress.outputs.progress }}%","color":"blue"}' > .github/badges/progress.json
+          git add .github/badges/progress.json
+          git diff --staged --quiet || git commit -m "🎮 Update progress: ${{ steps.progress.outputs.progress }}%"
           git push
