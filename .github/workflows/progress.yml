@@ -1,0 +1,68 @@
+name: Update Progress Bar
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-progress:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Calculate Progress
+        id: progress
+        run: |
+          # Count commits (each commit = 2% progress, max 100%)
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          PROGRESS=$((COMMIT_COUNT * 2))
+          if [ $PROGRESS -gt 100 ]; then
+            PROGRESS=100
+          fi
+          
+          # Create pixel progress bar (20 blocks total)
+          FILLED=$((PROGRESS / 5))
+          EMPTY=$((20 - FILLED))
+          
+          BAR=""
+          for i in $(seq 1 $FILLED); do BAR="${BAR}█"; done
+          for i in $(seq 1 $EMPTY); do BAR="${BAR}░"; done
+          
+          echo "progress=$PROGRESS" >> $GITHUB_OUTPUT
+          echo "bar=$BAR" >> $GITHUB_OUTPUT
+          echo "Progress: $PROGRESS% | Bar: $BAR"
+      
+      - name: Update README Progress
+        run: |
+          # Update the progress percentage and bar in README
+          sed -i "s/PROGRESS_PERCENT/${{ steps.progress.outputs.progress }}%/g" README.md 2>/dev/null || true
+          sed -i "s/PROGRESS_BAR/${{ steps.progress.outputs.bar }}/g" README.md 2>/dev/null || true
+      
+      - name: Update Progress JSON
+        run: |
+          mkdir -p .github/badges
+          cat > .github/badges/progress.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "🎮 Progress",
+            "message": "${{ steps.progress.outputs.progress }}%",
+            "color": "02569B"
+          }
+          EOF
+      
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add .github/badges/progress.json
+          git diff --staged --quiet || git commit -m "🎮 Auto-update progress: ${{ steps.progress.outputs.progress }}%"
+          git push
