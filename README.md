@@ -19,13 +19,6 @@
 
 <br/><br/>
 
-<!-- Dynamic Progress Badge from GitHub Actions -->
-<a href="https://github.com/AditthyaSS/ai-keyboard-app/actions">
-  <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/AditthyaSS/ai-keyboard-app/main/.github/badges/progress.json&style=for-the-badge" alt="Progress"/>
-</a>
-
-<br/><br/>
-
 <!-- Pixel Character -->
 <img src="assets/pixel/construction_icon.avif" width="120" alt="Pixel Builder"/>
 
@@ -34,31 +27,7 @@
 ### 🚧 This repo is under construction! 🚧
 *Building something awesome with AI magic* ✨
 
-<br/>
 
-### 🎮 PROJECT LOADING...
-
-```
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   🎮 SMART KEYBOARD PROGRESS                                 ║
-║                                                              ║
-║   ████████████████░░░░░░░░░░░░░░░░░░░░  40%                 ║
-║                                                              ║
-║   ▓▓▓▓▓▓▓▓ Foundation     ████████████ 100% ✅              ║
-║   ▓▓▓▓▓▓▓▓ Data Layer     ████████████ 100% ✅              ║
-║   ▓▓▓▓▓▓▓▓ State Mgmt     ████████████ 100% ✅              ║
-║   ▓▓▓▓▓▓▓▓ UI Screens     ████████████ 100% ✅              ║
-║   ▓▓▓▓▓▓▓▓ AI Integration ██████░░░░░░  50% 🔧              ║
-║   ░░░░░░░░ Testing        ░░░░░░░░░░░░   0% ⏳              ║
-║   ░░░░░░░░ Release        ░░░░░░░░░░░░   0% ⏳              ║
-║                                                              ║
-║   🕹️ Each commit = +2% progress!                            ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
-<br/>
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="700">
 
